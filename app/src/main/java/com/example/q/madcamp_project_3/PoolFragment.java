@@ -1,7 +1,12 @@
 package com.example.q.madcamp_project_3;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -10,12 +15,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 
 public class PoolFragment extends Fragment implements OnMapReadyCallback {
@@ -28,6 +40,11 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
     private TextView start_tv,dest_tv;
     private ImageButton btn_current_location;
     private Button btn_match;
+
+    private FusedLocationProviderClient mFusedLocationClient;
+    Geocoder coder;
+    double latitude, longitude;
+    private static final int REQUEST_CODE_PERMISSIONS = 1000;
 
     public PoolFragment(){
 
@@ -50,6 +67,33 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
         mapView.onResume();
         mapView.getMapAsync(this);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+
+        btn_current_location.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+                    requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSIONS);
+                    return;
+                }
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if(location != null){
+                            LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            map.addMarker(new MarkerOptions()
+                                    .position(myLocation)
+                                    .title("현재 위치"));
+                            map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                            map.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
+                        }
+                    }
+                });
+
+            }
+        });
+
 
         return view;
     }
@@ -58,5 +102,16 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap gmap) {
         map = gmap;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_CODE_PERMISSIONS :
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(),"권한 체크 거부 됨", Toast.LENGTH_SHORT).show();
+                }
+        }
     }
 }

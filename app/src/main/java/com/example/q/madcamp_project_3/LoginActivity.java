@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String result = sendPost(postDatabytes,URL_LOGIN);
                 System.out.println("RESULT FROM LOGIN : "+result);
-
+              
                 final Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                 final Intent driverIntent = new Intent(LoginActivity.this,DriverActivity.class);
 
