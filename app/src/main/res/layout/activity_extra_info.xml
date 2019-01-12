@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#17c0de">
 
     <TextView
@@ -13,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="Sign Up"
+        android:text="추가 인증"
         android:textColor="@android:color/white"
         android:textSize="30dp"
         android:textStyle="bold"
@@ -34,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <ImageButton
-            android:id="@+id/btn_confirm"
+            android:id="@+id/btn_extra_confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
@@ -42,8 +40,7 @@
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/textView5"
@@ -51,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:text="ID"
+            android:text="운전면허증"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,8 +61,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="5dp"
             android:ems="10"
-            android:hint="Touch Here!"
-            android:inputType="text"
+            android:hint="ex)00-00-000000-00"
+            android:inputType="number"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             app:layout_constraintEnd_toStartOf="@+id/btn_ocr"
@@ -78,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:text="Password"
+            android:text="차종"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/extra_license" />
 
@@ -91,8 +88,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Touch Here!"
-            android:inputType="textPassword"
+            android:hint="ex)cbr125r"
+            android:inputType="text"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -107,7 +104,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="8dp"
-            android:text="중복확인"
+            android:text="자동인식"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/extra_license"
             app:layout_constraintTop_toTopOf="parent" />
@@ -118,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:text="이름"
+            android:text="등록번호"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/extra_carkind" />
 
@@ -130,7 +127,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
-            android:hint="Touch Here!"
+            android:hint="ex)대전나6897"
             android:inputType="textPersonName"
             android:selectAllOnFocus="true"
             android:singleLine="true"
@@ -138,26 +135,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-        <CheckBox
-            android:id="@+id/checkBox_license"
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:text="면허 소유 여부"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/extra_carnum" />
-
-        <CheckBox
-            android:id="@+id/checkBox_hascar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:text="자차 소유 여부"
-            app:layout_constraintStart_toEndOf="@+id/checkBox_license"
-            app:layout_constraintTop_toBottomOf="@+id/extra_carnum" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

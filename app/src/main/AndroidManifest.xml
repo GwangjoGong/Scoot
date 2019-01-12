@@ -30,7 +30,25 @@
         </activity>
         <activity android:name=".SignUpActivity">
             <intent-filter>
-                <action android:name="android.intent.action.subMAIN_singup" />
+                <action android:name="android.intent.action.subMAIN_signup" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ExtraInfoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.subMAIN_extra" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".DriverActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.subMAIN_driver" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".DriverProfileActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.subMAIN_driver_profile" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
