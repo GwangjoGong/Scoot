@@ -63,6 +63,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 String result = sendPost(postDatabytes,URL_LOGIN);
                 System.out.println("RESULT FROM LOGIN : "+result);
+
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
             }
         });
 
