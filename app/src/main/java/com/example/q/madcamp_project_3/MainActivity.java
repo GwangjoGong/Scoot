@@ -1,19 +1,12 @@
 package com.example.q.madcamp_project_3;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+
 import android.support.v7.widget.Toolbar;
 
 import com.kakao.usermgmt.UserManagement;
@@ -22,7 +15,6 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.socket.emitter.Emitter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,10 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static Socket mSocket;
 
-
-    private Handler handler;
-
     private static final String URL_SERVER = "http://143.248.140.106:1580";
+
+    public static String name,phone,token;
 
 
     @Override
@@ -43,18 +34,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent data = getIntent();
+        name = data.getStringExtra("name");
+        phone = data.getStringExtra("phone");
+        System.out.println("PHONE PASSENGER : "+phone);
+        token = data.getStringExtra("token");
+
         //Toolbar Setting
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         //Tab Setting
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout =  findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab().setText("스쿠터풀"));
         tabLayout.addTab(tabLayout.newTab().setText("스쿠터셰어링"));
         tabLayout.addTab(tabLayout.newTab().setText("알람"));
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = findViewById(R.id.pager);
 
         TabPagerAdapter pagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         viewPager.setAdapter(pagerAdapter);
@@ -83,18 +80,6 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
-
-        /*
-        handler = new Handler();
-        //init socket
-
-
-        mSocket.on("toclient",onConnect);
-        */
-
-
     }
 
     @Override
@@ -105,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy(){
         super.onDestroy();
+        mSocket.disconnect();
         UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
             @Override
             public void onCompleteLogout() {
@@ -112,32 +98,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    /*
-    @Override
-    protected void onDestroy(){
-        super.onDestroy();
-        mSocket.off("toclient");
-        mSocket.close();
-    }
-
-    private Emitter.Listener onConnect = new Emitter.Listener() {
-        @Override
-        public void call(final Object... args) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        JSONObject receivedData = (JSONObject) args[0];
-
-                        String msg = receivedData.getString("msg");
-                        tv_test.setText(msg);
-
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-    };
-    */
 }

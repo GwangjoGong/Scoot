@@ -53,19 +53,19 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/extra_license"
+            android:id="@+id/et_id"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="8dp"
             android:ems="10"
             android:hint="ex)00-00-000000-00"
             android:inputType="number"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            app:layout_constraintEnd_toStartOf="@+id/btn_ocr"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -77,10 +77,10 @@
             android:layout_marginTop="10dp"
             android:text="차종"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/extra_license" />
+            app:layout_constraintTop_toBottomOf="@+id/et_id" />
 
         <EditText
-            android:id="@+id/extra_carkind"
+            android:id="@+id/et_pw"
             style="@style/Widget.AppCompat.EditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -96,19 +96,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-        <Button
-            android:id="@+id/btn_ocr"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="8dp"
-            android:text="자동인식"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/extra_license"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textView7"
             android:layout_width="wrap_content"
@@ -117,10 +104,10 @@
             android:layout_marginTop="10dp"
             android:text="등록번호"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/extra_carkind" />
+            app:layout_constraintTop_toBottomOf="@+id/et_pw" />
 
         <EditText
-            android:id="@+id/extra_carnum"
+            android:id="@+id/et_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
