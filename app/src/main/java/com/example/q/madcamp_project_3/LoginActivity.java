@@ -1,10 +1,15 @@
 package com.example.q.madcamp_project_3;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,10 +35,14 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.kakao.util.helper.Utility.getPackageInfo;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -81,11 +90,14 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     String token = jsonObject.getString("token");
                     String name = jsonObject.getString("name");
+                    String phone = jsonObject.getString("phone");
                     int userType = jsonObject.getInt("userType");
                     mainIntent.putExtra("token",token);
                     mainIntent.putExtra("name",name);
+                    mainIntent.putExtra("phone",phone);
                     driverIntent.putExtra("token",token);
                     driverIntent.putExtra("name",name);
+                    driverIntent.putExtra("phone",phone);
                     System.out.println("userType : "+userType);
 
                     if(userType==2){
@@ -170,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
         List<String> keys = new ArrayList<>();
         keys.add("properties.nickname");
         keys.add("kakao_account.email");
+        keys.add("kakao_account.phoneNumber");
 
         final String[] userName = new String[1];
         final long[] userId = new long[1];
@@ -207,13 +220,16 @@ public class LoginActivity extends AppCompatActivity {
                         String token = json.getString("token");
                         String name = json.getString("name");
                         int userType = json.getInt("userType");
+                        String phone = json.getString("phone");
 
                         final Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
                         final Intent driverIntent = new Intent(LoginActivity.this, DriverActivity.class);
-                        mainIntent.putExtra("token", token);
+                        mainIntent.putExtra("token",token);
                         mainIntent.putExtra("name", name);
+                        mainIntent.putExtra("phone",phone);
                         driverIntent.putExtra("token", token);
                         driverIntent.putExtra("name", name);
+                        driverIntent.putExtra("phone",phone);
 
 
                         if (userType == 2) {

@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -51,11 +51,15 @@ public class AlarmFragment extends Fragment {
 
     Button button_snow;
     Button button;
+
+    ImageView ic_snow, ic_sun;
     int day,month,year,day_snow,month_snow,year_snow, month_snow1, month1;
 
     TextView text, text_snow;
     public static TextView your_city;
+
     String OPEN_WEATHER_MAP_API = "08601ff6119001b3fc5bf2502891ebb3";
+
     public static String city, description;
     public static double latitude, longitude;
 
@@ -67,7 +71,7 @@ public class AlarmFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_alarm, container, false);
+        View view = inflater.inflate(R.layout.fragment_alrm, container, false);
 
         mContext = getActivity();
         button_snow = (Button)view.findViewById(R.id.btn_date_snow);
@@ -77,10 +81,13 @@ public class AlarmFragment extends Fragment {
         text = (TextView)view.findViewById(R.id.text);
         your_city = (TextView)view.findViewById(R.id.your_city);
 
-        //latitude = 36.3504;
-        //longitude = 127.3845;
-        latitude = 35.1595;
-        longitude =127.8526;
+        ic_snow = view.findViewById(R.id.ic_snow);
+        ic_snow.setImageResource(R.drawable.ic_snow);
+        ic_sun = view.findViewById(R.id.ic_sun);
+        ic_sun.setImageResource(R.drawable.ic_sun);
+
+        latitude = PoolFragment.curr_latlng.latitude;
+        longitude =PoolFragment.curr_latlng.longitude;
 
         find_weather();
         minDate = Calendar.getInstance();
