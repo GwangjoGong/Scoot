@@ -27,6 +27,7 @@ public class MyItem implements ClusterItem {
     private String mSnippet;
     private String mCarkind;
     private String mCarnum;
+    private String mPlace;
     private int mPrice;
     private JSONArray mAvailable;
 
@@ -36,13 +37,14 @@ public class MyItem implements ClusterItem {
 //        mSnippet = null;
 //    }
 
-    public MyItem(double lat, double lng, String title, String snippet, String carkind, String carnum, int price, JSONArray available) {
+    public MyItem(double lat, double lng, String title, String snippet, String carkind, String carnum, int price, JSONArray available,String place) {
         mPosition = new LatLng(lat, lng);
         mTitle = title;
         mSnippet = snippet;
         mCarkind = carkind;
         mCarnum = carnum;
         mPrice = price;
+        mPlace = place;
         mAvailable = available;
     }
 
@@ -60,6 +62,8 @@ public class MyItem implements ClusterItem {
     public String getCarkind() { return mCarkind; }
 
     public String getCarnum() { return mCarnum; }
+
+    public String getPlace() {return mPlace;}
 
     public int getPrice() { return mPrice; }
 

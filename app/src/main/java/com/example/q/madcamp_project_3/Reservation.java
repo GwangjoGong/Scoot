@@ -3,6 +3,7 @@ package com.example.q.madcamp_project_3;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.places.ui.PlacePicker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import io.socket.emitter.Emitter;
+
 public class Reservation extends AppCompatActivity {
 
     ImageView scooter_imageView;
@@ -20,7 +26,6 @@ public class Reservation extends AppCompatActivity {
     TextView start_time;
     TextView end_time;
     TextView scooter_location;
-    TextView scooter_location2;
     TextView price;
     Button reservation_button;
 
@@ -31,6 +36,7 @@ public class Reservation extends AppCompatActivity {
     String scooter_location_str;
     String price_str;
 
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +48,12 @@ public class Reservation extends AppCompatActivity {
         start_time = (TextView)findViewById(R.id.start_time);
         end_time = (TextView)findViewById(R.id.end_time);
         scooter_location = (TextView)findViewById(R.id.scooter_location);
-        scooter_location2 = (TextView)findViewById(R.id.scooter_location2);
         price = (TextView)findViewById(R.id.price);
         reservation_button = (Button)findViewById(R.id.reservation_button);
 
+        handler = new Handler();
+
+        MainActivity.mSocket.on("rent_success",onSuccess);
 
         scooter_number_str = getIntent().getExtras().getString("scooter_number");
         scooter_type_str = getIntent().getExtras().getString("scooter_type");
@@ -67,18 +75,44 @@ public class Reservation extends AppCompatActivity {
         start_time.setText(start_time_str);
         end_time.setText(end_time_str);
         scooter_location.setText(scooter_location_str);
-        scooter_location2.setText(scooter_location_str);
         price.setText(price_str + "원/일");
 
         reservation_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Reservation.this,"예약이 완료되었습니다",Toast.LENGTH_SHORT).show();
-                finish();
+                JSONObject data = new JSONObject();
+                try{
+                    data.put("carnum",scooter_number_str);
+                    data.put("duration",BottomSheetDialog.data[0]);
 
+                    MainActivity.mSocket.emit("on_rent",data);
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
             }
         });
 
 
     }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+    }
+
+    private Emitter.Listener onSuccess = new Emitter.Listener() {
+        @Override
+        public void call(Object... args) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(Reservation.this, "대여 요청이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            });
+
+        }
+    };
 }
+

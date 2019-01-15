@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,13 +20,18 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Share extends AppCompatActivity {
 
     Button btn_location, btn_start_date, btn_end_date, btn_share_confirm;
-    TextView share_scooter_type, share_scooter_num, share_price, start_date, end_date, share_scooter_location;
+    EditText share_scooter_type, share_scooter_num, share_price;
+    TextView start_date, end_date,share_scooter_location;
     DatePickerDialog start_date_Picker, end_date_Picker;
     int start_day, start_month, start_year, end_day, end_month, end_year, start_month1, end_month1;
     int count;
@@ -38,6 +44,8 @@ public class Share extends AppCompatActivity {
     private static final int SHARE_PICKER_REQUEST = 3;
 
 
+    private static final String URL_CAR_POST = "http://143.248.140.106:1580/api/car";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +57,11 @@ public class Share extends AppCompatActivity {
         btn_end_date = (Button)findViewById(R.id.btn_end_date);
         btn_share_confirm = (Button)findViewById(R.id.btn_share_confirm);
 
-        share_scooter_type = (TextView)findViewById(R.id.t2_1);
-        share_scooter_num = (TextView)findViewById(R.id.t3_1);
-        share_price = (TextView)findViewById(R.id.t4_1);
-        start_date = (TextView)findViewById(R.id.text_start_date);
-        end_date = (TextView)findViewById(R.id.text_end_date);
+        share_scooter_type = findViewById(R.id.t2_1);
+        share_scooter_num = findViewById(R.id.t3_1);
+        share_price = findViewById(R.id.t4_1);
+        start_date = findViewById(R.id.text_start_date);
+        end_date = findViewById(R.id.text_end_date);
         share_scooter_location = (TextView)findViewById(R.id.t5_1);
 
         count = 0;
@@ -149,6 +157,41 @@ public class Share extends AppCompatActivity {
                     Toast.makeText(Share.this,"쉐어링 스쿠터의 정보가\n성공적으로 저장되었습니다",Toast.LENGTH_SHORT).show();
 
                     //build available
+                    JSONArray available = new JSONArray();
+
+                    for(int i = start_day; i<=end_day; i++){
+                        JSONObject temp = new JSONObject();
+                        try{
+                            temp.put("date",start_year+"/"+start_month1+"/"+i);
+                            System.out.println("DATA : "+start_year+"/"+start_month1+"/"+i);
+                            available.put(temp);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+
+                    Map<String,Object> data = new LinkedHashMap<>();
+
+                    try{
+                        data.put("carkind",share_scooter_type.getText().toString().trim());
+                        data.put("carnum",share_scooter_num.getText().toString().trim());
+                        data.put("place",share_name);
+                        data.put("lat",String.valueOf(share_latlng.latitude));
+                        data.put("lng",String.valueOf(share_latlng.longitude));
+                        data.put("owner",MainActivity.name);
+                        data.put("price",share_price.getText().toString().trim());
+                        data.put("available",available);
+
+                        byte[] carDataBytes = LoginActivity.parseParameter(data);
+
+                        String result = LoginActivity.sendPost(carDataBytes,URL_CAR_POST);
+
+                        System.out.println("RESULT FROM CAR POST : "+result);
+
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
 
                     finish();
                 }

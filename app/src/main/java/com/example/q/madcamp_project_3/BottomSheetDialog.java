@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.GoogleMap;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,7 +35,12 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
     //int[] IMAGES = {R.drawable.bmw, R.drawable.yamaha, R.drawable.daelim, R.drawable.pcx};
     int[] IMAGES;
     String[] NAMES;
-    String[][] AVAILABLE;
+    String[] CARNUM;
+
+
+    public static String[] start = new String[1];
+    public static String[] end = new String[1];
+    public static JSONArray[] data = new JSONArray[1];
     public static List<MyItem> Revised_MyItemList;
 
     private BottomSheetBehavior.BottomSheetCallback
@@ -66,7 +72,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
         IMAGES = new int[ShareFragment.longitudeArrary.length];
         NAMES = new String[ShareFragment.longitudeArrary.length];
-        AVAILABLE = new String[ShareFragment.longitudeArrary.length][100];
+        CARNUM = new String[ShareFragment.longitudeArrary.length];
 
         ListView listView = (ListView)contentView.findViewById(R.id.listview);
 
@@ -84,12 +90,10 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                 Intent intent = new Intent(getActivity(), Reservation.class);
 
                 intent.putExtra("scooter_number",Revised_MyItemList.get(position).getCarnum());
-                //intent.putExtra("start_time",Revised_MyItemList.get(position).getAvailable());
-                intent.putExtra("start_time", "2019/01/16");
-                //intent.putExtra("end_time",Revised_MyItemList.get(position).getAvailable());
-                intent.putExtra("end_time", "2019/01/17");
+                intent.putExtra("start_time", start[0]);
+                intent.putExtra("end_time", end[0]);
                 intent.putExtra("scooter_type", Revised_MyItemList.get(position).getCarkind());
-                intent.putExtra("scooter_location","N1");
+                intent.putExtra("scooter_location",Revised_MyItemList.get(position).getPlace());
                 intent.putExtra("price",Revised_MyItemList.get(position).getPrice());
                 startActivity(intent);
                 dismiss();
@@ -110,18 +114,7 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
                     else IMAGES[i] =(R.drawable.scoot_icon);
 
                     NAMES[i] = myItem.getCarkind();
-                    Log.d("msg","Available length : " + myItem.getAvailable().length());
-                    for(int j=0;j<myItem.getAvailable().length();j++) {
-                        try {
-                            Log.d("msg", "j : " + j);
-                            JSONObject jsonObject = myItem.getAvailable().getJSONObject(j);
-                            AVAILABLE[i][j] = jsonObject.toString();
-//                                AVAILABLE[i] = myItem.getAvailable();
-                        }catch (JSONException e){
-                            System.out.println("JSONException occurs");
-                            e.printStackTrace();
-                        }
-                    }
+                    CARNUM[i] = myItem.getCarnum();
                     Revised_MyItemList.add(myItem);
                     break;
                 }
@@ -158,8 +151,8 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
 
 
             imageView.setImageResource(IMAGES[position]);
-            textView_name.setText(NAMES[position]);
-            //textView_description.setText(AVAILABLE[position][0] + " ~ " + AVAILABLE[position][AVAILABLE.length-1]);
+            textView_name.setText(NAMES[position].toUpperCase());
+            textView_description.setText(CARNUM[position]);
             return view;
         }
     }

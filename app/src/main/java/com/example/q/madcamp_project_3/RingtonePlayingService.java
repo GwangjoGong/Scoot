@@ -38,6 +38,8 @@ public class RingtonePlayingService extends Service {
         Date date = new Date();
         Log.d("MyApp", "링톤 도착 시간 " + date.toString());
 
+
+
         if (Build.VERSION.SDK_INT >= 26) {
             CHANNEL_ID = "default";
             channel = new NotificationChannel(CHANNEL_ID,
@@ -61,9 +63,10 @@ public class RingtonePlayingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+
         String getState = intent.getExtras().getString("state");
 
-        Log.d("msg","state : " + getState);
+        Log.d("msg","onStartCommand > state : " + getState);
 
         assert getState != null;
 

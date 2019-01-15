@@ -31,10 +31,24 @@ public class Alarm_Receiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
+        String des = AlarmFragment.find_weather();
+        Log.d("msg","des : " + des);
+
+        if( ( des.indexOf("rain") == -1 ) && ( des.indexOf("snow") == -1) && (AlarmFragment.pendingIntent_delay!=null)){
+            Log.d("msg","Please help me "+ des);
+            AlarmFragment.alarm_manager.cancel(AlarmFragment.pendingIntent_delay);
+            AlarmFragment.pendingIntent_delay = null;
+            return;
+        }
+
         this.context = context;
 
         Date date = new Date();
         Log.d("MyApp", "리시버 도착 시간 " + date.toString());
+
+
+
+
 
         String state = intent.getExtras().getString("state");
 
@@ -56,4 +70,3 @@ public class Alarm_Receiver extends BroadcastReceiver {
 
 
 }
-

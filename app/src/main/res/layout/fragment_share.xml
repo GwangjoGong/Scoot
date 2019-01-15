@@ -51,6 +51,7 @@
                 android:layout_width="wrap_content"
 
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
                 android:layout_weight="0.4"
                 android:src="@drawable/ic_arrow"
                 app:layout_constraintBottom_toTopOf="@id/nettime"
@@ -62,6 +63,7 @@
                 android:id="@+id/endit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
                 android:text="ttttt"
                 android:textColor="@android:color/black"
                 android:textSize="20dp"
@@ -75,6 +77,7 @@
                 android:id="@+id/nettime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 android:text="tttt"
                 app:layout_constraintBottom_toBottomOf="@+id/pick_layout"
                 app:layout_constraintEnd_toEndOf="parent"
