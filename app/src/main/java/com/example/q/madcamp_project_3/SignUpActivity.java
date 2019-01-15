@@ -134,6 +134,7 @@ public class SignUpActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         startActivity(driverIntent);
+                                                        finish();
                                                     }
                                                 })
                                         .setNegativeButton("사용자",
@@ -141,10 +142,12 @@ public class SignUpActivity extends AppCompatActivity {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         startActivity(mainIntent);
+                                                        finish();
                                                     }
                                                 }).show();
                             }else {
                                 startActivity(mainIntent);
+                                finish();
                             }
                         }catch (Exception e){
                             e.printStackTrace();
