@@ -43,7 +43,6 @@ public class RingtonePlayingService extends Service {
             channel = new NotificationChannel(CHANNEL_ID,
                     "Channel human readable title",
                     NotificationManager.IMPORTANCE_DEFAULT);
-           //((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
             notificationManager = ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE));
             notificationManager.createNotificationChannel(channel);
 
@@ -54,10 +53,8 @@ public class RingtonePlayingService extends Service {
                     .setSmallIcon(R.mipmap.ic_launcher)
 
                     .build();
-//            notification.flags |= Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
             startForeground(1, notification);
-            //notificationManager.notify(1,notification);
         }
     }
 
@@ -65,16 +62,10 @@ public class RingtonePlayingService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         String getState = intent.getExtras().getString("state");
-        //String getState_snow = intent.getExtras().getString("state_snow");
+
         Log.d("msg","state : " + getState);
-//        Log.d("msg","state_snow : " + getState_snow);
-//
-//        if(getState == null)  selected_state = getState_snow;
-//        else if(getState_snow == null) selected_state = getState;
-//        else if(getState == null && getState_snow==null) Log.d("msg", "Both states are null!");
 
         assert getState != null;
-//        assert getState_snow != null;
 
         switch (getState) {
             case "alarm on":

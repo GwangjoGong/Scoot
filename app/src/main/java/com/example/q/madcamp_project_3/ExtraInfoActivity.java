@@ -91,14 +91,15 @@ public class ExtraInfoActivity extends AppCompatActivity {
                     int userType = jsonObject.getInt("userType");
                     String phone = jsonObject.getString("phone");
                     if(userType == 1) {
-                        Intent intent = new Intent(ExtraInfoActivity.this, ExtraInfoActivity.class);
+                        Intent intent = new Intent(ExtraInfoActivity.this, MainActivity.class);
                         intent.putExtra("token", token);
                         intent.putExtra("name", name);
                         intent.putExtra("phone",phone);
                         startActivity(intent);
+                        finish();
                     }else{
                         //userType == 2
-                        final Intent mainIntent = new Intent(ExtraInfoActivity.this, ExtraInfoActivity.class);
+                        final Intent mainIntent = new Intent(ExtraInfoActivity.this, MainActivity.class);
                         final Intent driverIntent = new Intent(ExtraInfoActivity.this,DriverActivity.class);
                         mainIntent.putExtra("token",token);
                         mainIntent.putExtra("name",name);
@@ -116,6 +117,7 @@ public class ExtraInfoActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 startActivity(driverIntent);
+                                                finish();
                                             }
                                         })
                                 .setNegativeButton("사용자",
@@ -123,6 +125,7 @@ public class ExtraInfoActivity extends AppCompatActivity {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 startActivity(mainIntent);
+                                                finish();
                                             }
                                         }).show();
                     }
