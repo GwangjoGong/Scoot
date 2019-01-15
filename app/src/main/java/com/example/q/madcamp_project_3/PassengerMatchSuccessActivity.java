@@ -16,7 +16,7 @@ import io.socket.emitter.Emitter;
 
 public class PassengerMatchSuccessActivity extends AppCompatActivity {
 
-    private TextView onMatch_driver_name, onMatch_driver_phone, onMatch_driver_carkind, onMatch_driver_carnum;
+    private TextView onMatch_driver_name, onMatch_driver_carkind, onMatch_driver_carnum;
     private Button btn_passenger_call;
 
     @Override
@@ -31,7 +31,6 @@ public class PassengerMatchSuccessActivity extends AppCompatActivity {
         final String dPhone = data.getStringExtra("phone");
 
         onMatch_driver_name.setText(data.getStringExtra("name"));
-        onMatch_driver_phone.setText(dPhone);
         onMatch_driver_carkind.setText(data.getStringExtra("carkind"));
         onMatch_driver_carnum.setText(data.getStringExtra("carnum"));
 
@@ -67,7 +66,6 @@ public class PassengerMatchSuccessActivity extends AppCompatActivity {
 
     private void initView(){
         onMatch_driver_name = findViewById(R.id.onMatch_driver_name_tv);
-        onMatch_driver_phone = findViewById(R.id.onMatch_driver_phone_tv);
         onMatch_driver_carkind = findViewById(R.id.onMatch_driver_carkind_tv);
         onMatch_driver_carnum = findViewById(R.id.onMatch_driver_carnum_tv);
         btn_passenger_call = findViewById(R.id.btn_passenger_call);

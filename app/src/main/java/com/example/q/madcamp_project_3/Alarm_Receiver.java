@@ -5,59 +5,55 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.Date;
+
+import static com.example.q.madcamp_project_3.AlarmFragment.find_weather;
+import static java.lang.Thread.sleep;
 
 public class Alarm_Receiver extends BroadcastReceiver {
 
     Context context;
 
+    final String[] weather = new String[1];
+
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        this.context = context;
+
         Date date = new Date();
         Log.d("MyApp", "리시버 도착 시간 " + date.toString());
 
         String state = intent.getExtras().getString("state");
-        String state_snow = intent.getExtras().getString("state_snow");
+
         Log.d("msg","state : " + state);
-        Log.d("msg","state_snow : " + state_snow);
 
 
         // RingtonePlayingService 서비스 intent 생성
         Intent service_intent = new Intent(context, RingtonePlayingService.class);
 
-        if(state_snow != null){
-            String description = AlarmFragment.find_weather();
-
-            if(  (description.indexOf("snow") == -1) && (description.indexOf("rain") == -1) ) {
-                AlarmFragment.alarm_manager.cancel(AlarmFragment.pendingIntent_snow);
-                Log.d("msg", "There is no snow or rain so alarm_snow is canceled!");
-                return;
-            }
-            else {
-                Log.d("msg", "There is snow or rain so keep going");
-                service_intent.putExtra("state", state_snow);
-            }
-        }
-
-        else if(state != null){
-            service_intent.putExtra("state", state);
-        }
-
-        else{}
-
-        this.context = context;
-
-        // RingtonePlayinService로 extra string값 보내기
-
+        service_intent.putExtra("state",state);
 
         // start the ringtone service
-
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O){
             this.context.startForegroundService(service_intent);
         }else{
             this.context.startService(service_intent);
         }
     }
+
+
 }
 
