@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.FloatingActionButton;
@@ -64,6 +65,8 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
     private GoogleMap map;
     private MapView mapView;
 
+    private Handler handler;
+
     private Location last_location = null;
 
     private ImageButton btn_current_location_sharing,btn_search;
@@ -91,6 +94,7 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
 
 
 
+
     public ShareFragment() {
 
     }
@@ -100,6 +104,12 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
         public void call(Object... args) {
             dataSet = (JSONArray) args[0];
             System.out.println("dataSet from server : "+dataSet);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    startDemo();
+                }
+            });
         }
     };
 
@@ -108,6 +118,8 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
         System.out.println("onCreateView!");
         //Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_share, container, false);
+
+        handler = new Handler();
 
         //init view
         startit = view.findViewById(R.id.startit);
@@ -157,13 +169,14 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
                         startit.setText(year + " / " + month1 + " / " + day);
                         minDate.set(year, month, day);
                         minDate11.set(year,month,day1);
-
+                        BottomSheetDialog.start[0] = year + " / " + month1 + " / " + day;
                     }
                 }, year, month, day);
 
                 datePickerDialog1.getDatePicker().setMinDate(minDate.getTime().getTime());
 
                 datePickerDialog1.show();
+
 
             }
         });
@@ -188,44 +201,44 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
                             diff = minDate1.getTime().getTime() - minDate.getTime().getTime();
                             diffHours = diff / 60 / 60 / 1000;
                             nettime.setText("총 " + diffHours + "시간");
+                            BottomSheetDialog.end[0] = toyear + " / " + tomonth1 + " / " + tomorrow;
                         }
                     }, toyear, tomonth, tomorrow);
 
                     datePickerDialog2.getDatePicker().setMinDate(minDate11.getTime().getTime());
 
                     datePickerDialog2.show();
+
                 }
-
-
-
 
             }
         });
 
-        // Data format : yyyy/mm/dd
 
-        // Data type : JSONArray {available: [{date: Data format}, ...]}
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Data format : yyyy/mm/dd
 
-        JSONArray available = new JSONArray();
+                // Data type : JSONArray {available: [{date: Data format}, ...]}
 
-        for(int i = day; i<=tomorrow; i++){
-            JSONObject temp = new JSONObject();
-            try{
-                temp.put("date",year+"/"+month1+"/"+i);
-                available.put(temp);
-            }catch (JSONException e){
-                e.printStackTrace();
+                JSONArray available = new JSONArray();
+
+                for(int i = day; i<=tomorrow; i++){
+                    JSONObject temp = new JSONObject();
+                    try{
+                        temp.put("date",year+"/"+month1+"/"+i);
+                        available.put(temp);
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+
+                BottomSheetDialog.data[0] = available;
+                MainActivity.mSocket.emit("on_share",available);
+
             }
-        }
-
-        JSONObject data = new JSONObject();
-        try{
-            data.put("available",available);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-
-        MainActivity.mSocket.emit("on_share",data);
+        });
 
 
 
@@ -255,29 +268,36 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
         mapView.onResume();
         mapView.getMapAsync(this);
 
-        MainActivity.mSocket.emit("on_share");
 
         MainActivity.mSocket.on("data",onShare);
 
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSIONS);
+        }
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if(location != null){
+                    LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                    map.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
+                }
+            }
+        });
 
         btn_current_location_sharing.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
                     requestPermissions(new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_PERMISSIONS);
-                    return;
                 }
                 mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         if(location != null){
                             LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                            map.addMarker(new MarkerOptions()
-                                    .position(myLocation)
-                                    .title("현재 위치"));
                             map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
                             map.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
                         }
@@ -297,19 +317,6 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
     public void onMapReady(GoogleMap gmap) {
         System.out.println("onMapReady!");
         map = gmap;
-        startDemo();
-//        MyItem myItem1 = new MyItem(36.37414, 127.365647,"title","snippet");
-//        MyItem myItem2 = new MyItem(36.3742, 127.365647,"title","snippet");
-//        MyItem myItem3 = new MyItem(36.3743, 127.365647,"title","snippet");
-//        MyItem myItem4 = new MyItem(36.3744, 127.365647,"title","snippet");
-//        MyItem myItem5 = new MyItem(36.3745, 127.365647,"title","snippet");
-//MyItem myItem1 = new MyItem(36.37414, 127.365647,"title","snippet");
-//        mClusterManager.addItem(myItem1);
-//        mClusterManager.addItem(myItem2);
-//        mClusterManager.addItem(myItem3);
-//        mClusterManager.addItem(myItem4);
-//        mClusterManager.addItem(myItem5);
-
     }
 
     @Override
@@ -324,15 +331,14 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
     }
 
     protected void startDemo() {
-
         System.out.println("dataSet from server in startDemo : "+dataSet);
-        System.out.println("dataSet length from server in startDemo : "+dataSet.length());
+
+        map.clear();
 
         MyItemList = new ArrayList<>();
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(36.374153, 127.365647), 10));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(36.374153, 127.365647), 12));
 
         mClusterManager = new ClusterManager<>(getActivity(), map);
-
 
         map.setOnCameraIdleListener(mClusterManager);
         map.setOnMarkerClickListener(mClusterManager);
@@ -343,14 +349,13 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
                 try {
                     JSONObject jsonObject = dataSet.getJSONObject(i);
                     String carkind = jsonObject.getString("carkind");
-                    //String carnum = jsonObject.getString("carnum");
-                        String carnum = "대전 유성 가 1110";
+                    String carnum = jsonObject.getString("carnum");
                     double lat = Double.parseDouble(jsonObject.getString("lat"));
                     double lng = Double.parseDouble(jsonObject.getString("lng"));
                     Integer price = Integer.parseInt(jsonObject.getString("price"));
+                    String place = jsonObject.getString("place");
                     JSONArray available = jsonObject.getJSONArray("available");
-                    //String[] available = (String[]) jsonObject.get("available");
-                    MyItem myItem = new MyItem(lat,lng,"title","snippet",carkind,carnum,price,available);
+                    MyItem myItem = new MyItem(lat,lng,carkind,price+"원/일",carkind,carnum,price,available,place);
                     mClusterManager.addItem(myItem);
                     MyItemList.add(myItem);
                     System.out.println("After addItem");
@@ -360,23 +365,10 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
                     e.printStackTrace();
                 }
 
-
         }
 
-
-
-//        try {
-//            readItems();
-//        } catch (JSONException e) {
-//            Toast.makeText(this, "Problem reading list of markers.", Toast.LENGTH_LONG).show();
-//        }
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        setUpMap();
-//    }
 
     public boolean onClusterClick(Cluster cluster){
 
@@ -384,9 +376,11 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
 
         Collection<MyItem> userCollection = cluster.getItems();
         Log.d("msg","userCollection : " + userCollection);
+
         ArrayList<MyItem> markerList = new ArrayList<MyItem>(userCollection);
         Log.d("msg", "markerlistsize : " + markerList.size());
         Log.d("msg","markerlist : " + markerList);
+
         latitudeArrary = new double[markerList.size()];
         longitudeArrary = new double[markerList.size()];
         for(int i=0;i<markerList.size();i++) {
@@ -406,14 +400,15 @@ public class ShareFragment extends Fragment implements ClusterManager.OnClusterC
 
     public boolean onClusterItemClick(ClusterItem item) {
         Log.d("msg","In onClusterItemClick!!!!!");
+        latitudeArrary = new double[1];
+        longitudeArrary = new double[1];
+        latitudeArrary[0] = item.getPosition().latitude;
+        longitudeArrary[0] = item.getPosition().longitude;
         BottomSheetDialogFragment bottomSheetDialogFragment = new BottomSheetDialog();
         bottomSheetDialogFragment.show(getActivity().getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
         Log.d("msg","Item 좌표 : " + item.getPosition().latitude + " , " +item.getPosition().longitude);
 
         return false;
     }
-
-
-
 
 }
