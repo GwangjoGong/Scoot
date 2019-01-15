@@ -29,7 +29,7 @@ public class ExtraInfoActivity extends AppCompatActivity {
     private ImageButton btn_extra_confirm;
 
     private static final String TAG = ExtraInfoActivity.class.getSimpleName();
-    private static final String API_KEY = "AIzaSyAWjKrFNUjPRufkV45CgKny6LnvH7CFK9s";
+    private static final String API_KEY = "AIzaSyCZh2EIKEk725L5BP7b1RpljjmUWoDZdio";
 
     @Override
     protected void onCreate(Bundle savedInstanceState){

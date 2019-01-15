@@ -89,6 +89,9 @@ public class AlarmFragment extends Fragment {
         latitude = PoolFragment.curr_latlng.latitude;
         longitude =PoolFragment.curr_latlng.longitude;
 
+        //latitude= 55.7558;
+        //longitude=37.6173;
+
         find_weather();
         minDate = Calendar.getInstance();
 
@@ -162,6 +165,9 @@ public class AlarmFragment extends Fragment {
         // 타임피커 설정
         alarm_timepicker = view.findViewById(R.id.time_picker);
         alarm_timepicker_snow = view.findViewById(R.id.time_picker_snow);
+
+        alarm_timepicker.setIs24HourView(true);
+        alarm_timepicker_snow.setIs24HourView(true);
 
         // Calendar 객체 생성
 //        calendar = Calendar.getInstance();

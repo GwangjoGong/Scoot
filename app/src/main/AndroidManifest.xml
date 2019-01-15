@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
@@ -22,98 +21,118 @@
         tools:ignore="GoogleAppIndexingWarning">
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAWjKrFNUjPRufkV45CgKny6LnvH7CFK9s" />
+            android:value="AIzaSyCZh2EIKEk725L5BP7b1RpljjmUWoDZdio" />
+
+        <activity android:name=".Reservation" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.maincontent" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".SignUpActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_signup" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ExtraInfoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_extra" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".DriverActivity">
-        <intent-filter>
-            <action android:name="android.intent.action.subMAIN_driver" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.subMAIN_driver" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".DriverProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_driver_profile" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".DriverAfterConfirmActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_driver_after_confirm" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".DriverMatchInfoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_driver_match_info" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".DriverMatchSuccessActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_driver_match_success" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".PassengerMatchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.subMAIN_passenger_match" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".PassengerMatchSuccessActivity">
             <intent-filter>
-                <action android:name="android.intent.action.subMAIN_passenger_match_success"/>
+                <action android:name="android.intent.action.subMAIN_passenger_match_success" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".PassengerAfterConfirmActivity">
             <intent-filter>
-                <action android:name="android.intent.action.subMAIN_passenger_after_confirm"/>
+                <action android:name="android.intent.action.subMAIN_passenger_after_confirm" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="@string/kakao_app_key" />
+
         <activity
             android:name="com.kakao.auth.authorization.authcode.KakaoWebViewActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <receiver android:name=".Alarm_Receiver" />
 
         <service
             android:name=".RingtonePlayingService"
-            android:enabled="true"></service>
-        <uses-library android:name="com.google.android.maps"/>
+            android:enabled="true" />
 
+        <uses-library android:name="com.google.android.maps" />
+
+        <activity android:name=".Share"></activity>
     </application>
 
 </manifest>
