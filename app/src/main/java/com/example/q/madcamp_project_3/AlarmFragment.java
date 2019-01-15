@@ -77,10 +77,6 @@ public class AlarmFragment extends Fragment {
         // 알람리시버 intent 생성
         final Intent my_intent = new Intent(mContext, Alarm_Receiver.class);
 
-        //Calendar 객체 생성
-        final Calendar calendar = Calendar.getInstance();
-
-
         btn_start.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override

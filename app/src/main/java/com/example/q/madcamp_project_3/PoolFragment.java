@@ -130,6 +130,7 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+
             }
         });
 
