@@ -27,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -37,6 +38,7 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
     private MapView mapView;
 
+    private Marker curr;
 
     private TextView start_tv,dest_tv;
     private ImageButton btn_current_location;
@@ -66,21 +68,6 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
         init(view,savedInstanceState);
 
 
-        //configure match button
-        btn_match.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(start_name.equals("undefined") || dest_name.equals("undefined")){
-                    Toast.makeText(getActivity(),"출발/목적지를 설정해 주세요.",Toast.LENGTH_SHORT).show();
-                }else {
-                    Intent intent = new Intent(getActivity(), PassengerMatchActivity.class);
-                    startActivity(intent);
-                    map.clear();
-                }
-            }
-        });
-
-        //Configure current location
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -94,11 +81,29 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
                         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                         curr_latlng = myLocation;
                         map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                        curr = map.addMarker(new MarkerOptions().position(myLocation).title("현재위치"));
                         map.animateCamera(CameraUpdateFactory.zoomTo(17));
                     }
                 }
             });
         }
+
+        //configure match button
+        btn_match.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(start_tv.getText().equals("터치해서 설정하세요") || dest_tv.getText().equals("터치해서 설정하세요")){
+                    Toast.makeText(getActivity(),"출발/목적지를 설정해 주세요.",Toast.LENGTH_SHORT).show();
+                }else {
+                    Intent intent = new Intent(getActivity(), PassengerMatchActivity.class);
+                    startActivity(intent);
+                    map.clear();
+                    start_tv.setText("터치해서 설정하세요");
+                    dest_tv.setText("터치해서 설정하세요");
+                }
+            }
+        });
+
 
         btn_current_location.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -112,7 +117,9 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
                         if(location != null){
                             LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             curr_latlng = myLocation;
+                            curr.remove();
                             map.moveCamera(CameraUpdateFactory.newLatLng(myLocation));
+                            curr = map.addMarker(new MarkerOptions().position(myLocation).title("현재위치"));
                             map.animateCamera(CameraUpdateFactory.zoomTo(17));
                         }
                     }
@@ -126,6 +133,7 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
                 try{
+                    curr.remove();
                     Intent intent = intentBuilder.build(getActivity());
                     startActivityForResult(intent,START_PICKER_REQUEST);
                 }catch (Exception e){
@@ -140,6 +148,7 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(View v) {
                 PlacePicker.IntentBuilder intentBuilder = new PlacePicker.IntentBuilder();
                 try{
+                    curr.remove();
                     Intent intent = intentBuilder.build(getActivity());
                     startActivityForResult(intent,DEST_PICKER_REQUEST);
                 }catch (Exception e){
@@ -151,6 +160,12 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //Configure current location
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
