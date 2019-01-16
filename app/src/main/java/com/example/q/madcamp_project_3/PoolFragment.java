@@ -75,6 +75,7 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
                 }else {
                     Intent intent = new Intent(getActivity(), PassengerMatchActivity.class);
                     startActivity(intent);
+                    map.clear();
                 }
             }
         });
@@ -150,6 +151,7 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -198,7 +200,6 @@ public class PoolFragment extends Fragment implements OnMapReadyCallback {
         mapView.onResume();
         mapView.getMapAsync(this);
     }
-
     @Override
     public void onMapReady(GoogleMap gmap) {
         map = gmap;
