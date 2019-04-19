@@ -10,6 +10,6 @@ Server : Express / node.js
 
 DB : mongoDB
 
-![](KakaoTalk_Photo_2019-04-19-21-45-42-8467e4d2-44b6-4f41-9dc4-c7aa912a875e.jpeg)
+<img src="https://github.com/dwc05101/Madcamp-project3/issues/12#issue-435167482" width="90%"/>
 
 implemented on Android Studio (SDK 28)
