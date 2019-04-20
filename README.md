@@ -4,7 +4,7 @@ Scoot is android-based application platform for scooter pooling service.
 
 ---
 
-### Contributers
+### Developers
 
 Gwangjo Gong
 
